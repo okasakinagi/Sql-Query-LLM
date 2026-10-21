@@ -1,0 +1,37 @@
+# ---------------------------------------------------------------- Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# 虚拟环境
+.venv/
+venv/
+env/
+
+# ------------------------------------------------------------ 本地配置
+# 含数据库口令与模型地址，不要提交；模板见 .env.example
+.env
+
+# ------------------------------------------- 模型权重与推理引擎（体积过大）
+# 下载与部署方式见 deploy/README.md
+deploy/models/*
+!deploy/models/.gitkeep
+deploy/runtime/*
+!deploy/runtime/.gitkeep
+deploy/logs/
+
+# -------------------------------------------------------------- 生成物
+output/
+*.log
+
+# -------------------------------------------------------------- 编辑器
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini

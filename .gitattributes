@@ -1,0 +1,26 @@
+# 默认按文本处理，由 Git 自动判断是否二进制
+* text=auto
+
+# Windows 脚本保持 CRLF，避免 PowerShell 5.1 下解析异常
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# 数据与前端统一 LF
+*.py  text eol=lf
+*.sql text eol=lf
+*.js  text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.md  text eol=lf
+
+# 明确二进制
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.gguf binary
+*.docx binary
+*.pptx binary
+*.pdf  binary

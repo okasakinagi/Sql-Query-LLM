@@ -1,0 +1,3 @@
+# llama.cpp 可执行文件与 CUDA 运行时 DLL 放在这里，不提交到版本库
+# 解压后目录结构应为 runtime/llama.cpp/llama-server.exe
+# 下载方式见 ../README.md

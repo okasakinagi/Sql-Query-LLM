@@ -1,0 +1,182 @@
+[
+  {
+    "id": 1,
+    "type": "单表聚合",
+    "q": "各部门分别有多少名员工",
+    "sql": "SELECT d.department_name, COUNT(e.employee_id) FROM departments d LEFT JOIN employees e ON e.department_id = d.department_id GROUP BY d.department_id, d.department_name"
+  },
+  {
+    "id": 2,
+    "type": "单表统计",
+    "q": "公司一共有多少名员工",
+    "sql": "SELECT COUNT(*) FROM employees"
+  },
+  {
+    "id": 3,
+    "type": "条件过滤",
+    "q": "月薪超过 20000 元的员工有哪些，请给出姓名和月薪",
+    "sql": "SELECT employee_name, salary FROM employees WHERE salary > 20000"
+  },
+  {
+    "id": 4,
+    "type": "分组统计",
+    "q": "每个岗位分别有多少名员工",
+    "sql": "SELECT job_title, COUNT(*) FROM employees GROUP BY job_title"
+  },
+  {
+    "id": 5,
+    "type": "排序取前N",
+    "q": "员工人数最多的前 3 个部门是哪些",
+    "sql": "SELECT d.department_name, COUNT(e.employee_id) AS c FROM departments d JOIN employees e ON e.department_id = d.department_id GROUP BY d.department_id, d.department_name ORDER BY c DESC LIMIT 3"
+  },
+  {
+    "id": 6,
+    "type": "自连接",
+    "q": "每个员工的直属上级叫什么名字",
+    "sql": "SELECT e.employee_name, m.employee_name FROM employees e LEFT JOIN employees m ON e.manager_id = m.employee_id"
+  },
+  {
+    "id": 7,
+    "type": "子查询",
+    "q": "哪些员工没有管理任何下属",
+    "sql": "SELECT employee_name FROM employees WHERE employee_id NOT IN (SELECT manager_id FROM employees WHERE manager_id IS NOT NULL)"
+  },
+  {
+    "id": 8,
+    "type": "聚合函数",
+    "q": "每个部门的平均月薪是多少，保留两位小数",
+    "sql": "SELECT d.department_name, ROUND(AVG(e.salary), 2) FROM departments d JOIN employees e ON e.department_id = d.department_id GROUP BY d.department_id, d.department_name"
+  },
+  {
+    "id": 9,
+    "type": "时间趋势",
+    "q": "2025 年每个月的销售额分别是多少",
+    "sql": "SELECT DATE_FORMAT(order_date, '%Y-%m'), ROUND(SUM(total_amount), 2) FROM sales_orders WHERE status <> '已取消' AND YEAR(order_date) = 2025 GROUP BY DATE_FORMAT(order_date, '%Y-%m')"
+  },
+  {
+    "id": 10,
+    "type": "时间趋势",
+    "q": "每年的销售总额分别是多少",
+    "sql": "SELECT YEAR(order_date), ROUND(SUM(total_amount), 2) FROM sales_orders WHERE status <> '已取消' GROUP BY YEAR(order_date)"
+  },
+  {
+    "id": 11,
+    "type": "多表JOIN",
+    "q": "销量最高的前 5 个商品是哪些",
+    "sql": "SELECT p.product_name, SUM(i.quantity) AS q FROM sales_order_items i JOIN sales_orders s ON i.so_id = s.so_id AND s.status <> '已取消' JOIN products p ON i.product_id = p.product_id GROUP BY p.product_id, p.product_name ORDER BY q DESC LIMIT 5"
+  },
+  {
+    "id": 12,
+    "type": "多表JOIN",
+    "q": "各大类（一级分类）的销售额分别是多少",
+    "sql": "SELECT c1.category_name, ROUND(SUM(i.amount), 2) FROM sales_order_items i JOIN sales_orders s ON i.so_id = s.so_id AND s.status <> '已取消' JOIN products p ON i.product_id = p.product_id JOIN categories c2 ON p.category_id = c2.category_id JOIN categories c1 ON c2.parent_id = c1.category_id GROUP BY c1.category_id, c1.category_name"
+  },
+  {
+    "id": 13,
+    "type": "二级分类",
+    "q": "每个二级分类下各有多少种商品",
+    "sql": "SELECT c.category_name, COUNT(p.product_id) FROM categories c JOIN products p ON p.category_id = c.category_id WHERE c.parent_id IS NOT NULL GROUP BY c.category_id, c.category_name"
+  },
+  {
+    "id": 14,
+    "type": "NOT EXISTS",
+    "q": "有多少个客户从来没有下过订单",
+    "sql": "SELECT COUNT(*) FROM customers c WHERE NOT EXISTS (SELECT 1 FROM sales_orders s WHERE s.customer_id = c.customer_id)"
+  },
+  {
+    "id": 15,
+    "type": "分组统计",
+    "q": "每个信用等级的客户各有多少个",
+    "sql": "SELECT credit_level, COUNT(*) FROM customers GROUP BY credit_level"
+  },
+  {
+    "id": 16,
+    "type": "分组统计",
+    "q": "客户数量最多的前 5 个城市是哪些",
+    "sql": "SELECT city, COUNT(*) AS c FROM customers GROUP BY city ORDER BY c DESC LIMIT 5"
+  },
+  {
+    "id": 17,
+    "type": "状态分组",
+    "q": "按订单状态统计各种状态下的订单笔数和订单总金额",
+    "sql": "SELECT status, COUNT(*), ROUND(SUM(total_amount), 2) FROM sales_orders GROUP BY status"
+  },
+  {
+    "id": 18,
+    "type": "条件过滤",
+    "q": "付款状态为未付款的订单有多少笔，涉及金额总共多少",
+    "sql": "SELECT COUNT(*), ROUND(SUM(total_amount), 2) FROM sales_orders WHERE payment_status = '未付款'"
+  },
+  {
+    "id": 19,
+    "type": "Top-N",
+    "q": "销售额排名前 10 的城市以及对应销售额",
+    "sql": "SELECT city, ROUND(SUM(total_amount), 2) AS amt FROM sales_orders WHERE status <> '已取消' GROUP BY city ORDER BY amt DESC LIMIT 10"
+  },
+  {
+    "id": 20,
+    "type": "多表JOIN",
+    "q": "每个业务员负责的订单总金额排名前 5，请给出业务员姓名和金额",
+    "sql": "SELECT e.employee_name, ROUND(SUM(s.total_amount), 2) AS amt FROM sales_orders s JOIN employees e ON s.employee_id = e.employee_id WHERE s.status <> '已取消' GROUP BY e.employee_id, e.employee_name ORDER BY amt DESC LIMIT 5"
+  },
+  {
+    "id": 21,
+    "type": "库存预警",
+    "q": "有多少条库存记录低于安全库存",
+    "sql": "SELECT COUNT(*) FROM inventory WHERE quantity < safety_stock"
+  },
+  {
+    "id": 22,
+    "type": "分组统计",
+    "q": "每个仓库各有多少种商品",
+    "sql": "SELECT w.warehouse_name, COUNT(DISTINCT i.product_id) FROM inventory i JOIN warehouses w ON i.warehouse_id = w.warehouse_id GROUP BY w.warehouse_id, w.warehouse_name"
+  },
+  {
+    "id": 23,
+    "type": "条件过滤",
+    "q": "当前库存数量为 0 的商品有哪些",
+    "sql": "SELECT DISTINCT p.product_name FROM inventory i JOIN products p ON i.product_id = p.product_id WHERE i.quantity = 0"
+  },
+  {
+    "id": 24,
+    "type": "条件过滤",
+    "q": "评级为 A 的供应商有多少家",
+    "sql": "SELECT COUNT(*) FROM suppliers WHERE rating = 'A'"
+  },
+  {
+    "id": 25,
+    "type": "多表JOIN",
+    "q": "采购金额最高的前 5 个供应商，请给出供应商名称和采购总额",
+    "sql": "SELECT s.supplier_name, ROUND(SUM(p.total_amount), 2) AS amt FROM purchase_orders p JOIN suppliers s ON p.supplier_id = s.supplier_id WHERE p.status <> '已取消' GROUP BY s.supplier_id, s.supplier_name ORDER BY amt DESC LIMIT 5"
+  },
+  {
+    "id": 26,
+    "type": "时间趋势",
+    "q": "2024 年、2025 年、2026 年各自的销售额分别是多少",
+    "sql": "SELECT YEAR(order_date), ROUND(SUM(total_amount), 2) FROM sales_orders WHERE status <> '已取消' GROUP BY YEAR(order_date)"
+  },
+  {
+    "id": 27,
+    "type": "Top-N",
+    "q": "2025 年销售额最高的 3 个月分别是哪几个月",
+    "sql": "SELECT DATE_FORMAT(order_date, '%Y-%m'), ROUND(SUM(total_amount), 2) AS amt FROM sales_orders WHERE status <> '已取消' AND YEAR(order_date) = 2025 GROUP BY DATE_FORMAT(order_date, '%Y-%m') ORDER BY amt DESC LIMIT 3"
+  },
+  {
+    "id": 28,
+    "type": "聚合函数",
+    "q": "按销售明细的成交单价计算，平均单价最高的前 5 个商品是哪些",
+    "sql": "SELECT p.product_name, ROUND(AVG(i.unit_price), 2) AS avg_price FROM sales_order_items i JOIN sales_orders s ON i.so_id = s.so_id AND s.status <> '已取消' JOIN products p ON i.product_id = p.product_id GROUP BY p.product_id, p.product_name ORDER BY avg_price DESC LIMIT 5"
+  },
+  {
+    "id": 29,
+    "type": "条件过滤",
+    "q": "销售明细中使用过折扣（折扣系数小于 1）的记录有多少条",
+    "sql": "SELECT COUNT(*) FROM sales_order_items WHERE discount < 1"
+  },
+  {
+    "id": 30,
+    "type": "多表JOIN",
+    "q": "每个一级分类的商品平均售价是多少",
+    "sql": "SELECT c1.category_name, ROUND(AVG(p.sale_price), 2) FROM products p JOIN categories c2 ON p.category_id = c2.category_id JOIN categories c1 ON c2.parent_id = c1.category_id GROUP BY c1.category_id, c1.category_name"
+  }
+]

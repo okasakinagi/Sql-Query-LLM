@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能数据库查询系统 · ERP</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="/static/vendor/echarts.min.js"></script>
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <span class="logo">DB</span>
+            <div>
+                <h1>基于大语言模型的智能数据库查询系统</h1>
+                <p class="sub">自然语言 → SQL → 数据 → 图表 → 报告 ｜ 数据源：中小企业进销存与销售管理</p>
+            </div>
+        </div>
+        <div class="status">
+            <span class="badge" id="badge-db"><i></i>数据库</span>
+            <span class="badge" id="badge-llm"><i></i>大模型</span>
+        </div>
+    </header>
+
+    <div class="layout">
+        <!-- ==================== 左侧：库结构 ==================== -->
+        <aside class="sidebar">
+            <div class="section-head">
+                <h2>数据库结构</h2>
+                <button id="refresh-schema" class="mini-btn"
+                        title="重新读取数据库结构（新增表 / 字段后使用）">刷新</button>
+            </div>
+            <p class="hint" id="schema-hint">加载中…</p>
+            <div id="schema-list" class="schema-list"></div>
+
+            <h2 class="mt">示例问题</h2>
+            <div id="samples" class="samples"></div>
+        </aside>
+
+        <!-- ==================== 右侧：对话 ==================== -->
+        <main class="chat">
+            <div id="messages" class="messages">
+                <div class="welcome">
+                    <h2>👋 用一句话提问，自动生成 SQL 并出图</h2>
+                    <p>支持单表查询、多表关联、聚合统计、时间趋势与复杂条件筛选。</p>
+                    <div class="welcome-grid">
+                        <div><b>① 理解意图</b><span>解析自然语言，匹配相关业务口径</span></div>
+                        <div><b>② 生成 SQL</b><span>自动校验 + 失败重试，只读安全防护</span></div>
+                        <div><b>③ 结果呈现</b><span>数据表格 + ECharts 图表 + 文字结论</span></div>
+                        <div><b>④ 一键导出</b><span>Word 报告 / PDF 打印</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="composer">
+                <textarea id="input" rows="1" placeholder="例如：2025 年每个月的销售额是多少？（Enter 发送，Shift+Enter 换行）"></textarea>
+                <button id="send" title="发送">发送</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+
+</html>
